@@ -88,15 +88,28 @@ def main():
 
     animal_data = fetch_animal_data(animal_name)
     if animal_data:
-        print("Website was successfully generated to the file animals.html")
         animal_info_text = render_animals_text(animal_data)
-        html_template = load_html_template(TEMPLATE_FILENAME)
-        rendered_html = html_template.replace('__REPLACE_ANIMALS_INFO__', animal_info_text)
-
-        with open(OUTPUT_HTML_FILENAME, 'w') as output_file:
-            output_file.write(rendered_html)
+        print("Website was successfully generated to the file animals.html")
     else:
+        animal_info_text = f'''
+        <li class="cards__item">
+            <div class="card__title">Oops!</div>
+            <div class="card__text">
+                <p style="color:red; font-weight:bold;">
+                    The animal "{animal_name}" doesn't exist.
+                </p>
+            </div>
+        </li>
+        '''
         print('problem loading data !')
+
+
+
+    html_template = load_html_template(TEMPLATE_FILENAME)
+    rendered_html = html_template.replace('__REPLACE_ANIMALS_INFO__', animal_info_text)
+    with open(OUTPUT_HTML_FILENAME, 'w') as output_file:
+        output_file.write(rendered_html)
+
 
 
 

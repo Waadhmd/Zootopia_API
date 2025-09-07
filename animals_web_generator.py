@@ -1,4 +1,3 @@
-import json
 from data_fetcher import fetch_data
 
 ANIMALS_DATA_FILENAME = 'animals_data.json'

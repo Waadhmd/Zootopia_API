@@ -1,8 +1,11 @@
 import json
+import requests
 
 ANIMALS_DATA_FILENAME = 'animals_data.json'
 TEMPLATE_FILENAME = 'animals_template.html'
 OUTPUT_HTML_FILENAME = "animals.html"
+API_URL = "https://api.api-ninjas.com/v1/animals"
+API_KEY = "LBEzQVe/r1WOiPVe36JF6Q==GJJKAb0NuU0NBxOJ"
 
 def load_data(file_path):
     """
@@ -12,6 +15,13 @@ def load_data(file_path):
     """
     with open(file_path , 'r') as handle:
         return json.load(handle)
+
+def fetch_animal_data(animal_name):
+    """  Fetch animal data from the API Ninjas Animals API by animal name"""
+    headers = {'X-Api-Key':API_KEY}
+    response = requests.get(f"{API_URL}?name={animal_name}",headers=headers)
+    return response.json()
+
 
 def load_html_template(file_path):
     """

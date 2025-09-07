@@ -1,30 +1,9 @@
 import json
-import requests
+from data_fetcher import fetch_data
 
 ANIMALS_DATA_FILENAME = 'animals_data.json'
 TEMPLATE_FILENAME = 'animals_template.html'
 OUTPUT_HTML_FILENAME = "animals.html"
-API_URL = "https://api.api-ninjas.com/v1/animals"
-API_KEY = "LBEzQVe/r1WOiPVe36JF6Q==GJJKAb0NuU0NBxOJ"
-
-def load_data(file_path):
-    """
-     Load JSON data from a file.
-    Returns:
-        list: Parsed JSON data as a list of dictionaries
-    """
-    with open(file_path , 'r') as handle:
-        return json.load(handle)
-
-def fetch_animal_data(animal_name):
-    """  Fetch animal data from the API Ninjas Animals API by animal name"""
-    headers = {'X-Api-Key':API_KEY}
-    response = requests.get(f"{API_URL}?name={animal_name}",headers=headers)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print(f"Error: status {response.status_code}")
-        return None
 
 
 def load_html_template(file_path):
@@ -86,7 +65,7 @@ def main():
             continue
         break
 
-    animal_data = fetch_animal_data(animal_name)
+    animal_data = fetch_data(animal_name)
     if animal_data:
         animal_info_text = render_animals_text(animal_data)
         print("Website was successfully generated to the file animals.html")
@@ -104,14 +83,10 @@ def main():
         print('problem loading data !')
 
 
-
     html_template = load_html_template(TEMPLATE_FILENAME)
     rendered_html = html_template.replace('__REPLACE_ANIMALS_INFO__', animal_info_text)
     with open(OUTPUT_HTML_FILENAME, 'w') as output_file:
         output_file.write(rendered_html)
-
-
-
 
 
 

@@ -20,7 +20,11 @@ def fetch_animal_data(animal_name):
     """  Fetch animal data from the API Ninjas Animals API by animal name"""
     headers = {'X-Api-Key':API_KEY}
     response = requests.get(f"{API_URL}?name={animal_name}",headers=headers)
-    return response.json()
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Error: status {response.status_code}")
+        return None
 
 
 def load_html_template(file_path):
@@ -75,13 +79,29 @@ def main():
     - Inserts card list into the HTML template
     - Saves the rendered HTML file
     """
-    animals = load_data(ANIMALS_DATA_FILENAME)
-    animal_info_text = render_animals_text(animals)
-    html_template = load_html_template(TEMPLATE_FILENAME)
-    rendered_html = html_template.replace('__REPLACE_ANIMALS_INFO__',animal_info_text)
+    while True:
+        animal_name = input("Enter a name of an animal: ").strip()
+        if not animal_name:
+            print("Please enter a non-empty animal name")
+            continue
+        break
 
-    with open(OUTPUT_HTML_FILENAME , 'w') as output_file:
-        output_file.write(rendered_html)
+    animal_data = fetch_animal_data(animal_name)
+    if animal_data:
+        print("Website was successfully generated to the file animals.html")
+        animal_info_text = render_animals_text(animal_data)
+        html_template = load_html_template(TEMPLATE_FILENAME)
+        rendered_html = html_template.replace('__REPLACE_ANIMALS_INFO__', animal_info_text)
+
+        with open(OUTPUT_HTML_FILENAME, 'w') as output_file:
+            output_file.write(rendered_html)
+    else:
+        print('problem loading data !')
+
+
+
+
+
 
 if __name__ == '__main__':
     main()

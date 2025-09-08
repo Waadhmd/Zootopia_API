@@ -1,6 +1,5 @@
 from data_fetcher import fetch_data
 
-ANIMALS_DATA_FILENAME = 'animals_data.json'
 TEMPLATE_FILENAME = 'animals_template.html'
 OUTPUT_HTML_FILENAME = "animals.html"
 
